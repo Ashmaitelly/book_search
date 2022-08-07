@@ -26,10 +26,10 @@ export default function AuthorSearch() {
     if (search !== '') {
       localStorage.setItem('search', search);
       GetInfo(
-        `https://www.googleapis.com/books/v1/volumes?q=inauthor:"${search.replace(
+        `https://www.googleapis.com/books/v1/volumes?q=inauthor:${search.replace(
           ' ',
           '+'
-        )}"&filter=free-ebooks` +
+        )}&filter=free-ebooks` +
           `&key=${process.env.REACT_APP_API_KEY}` +
           '&orderBy=newest&maxResults=40' +
           `&startIndex=${bIndex}`
@@ -46,7 +46,7 @@ export default function AuthorSearch() {
       setBooks([]);
       setTotal(0);
     }
-  }, [search, bIndex, total]);
+  }, [search, bIndex]);
   //set pages useEffect
   useEffect(() => {
     let temp = [];
