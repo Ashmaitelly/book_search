@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import BookAppBar from '../components/BookAppBar';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import BookCard from '../components/BookCard';
-import Grid from '@mui/material/Grid';
-import { Typography } from '@mui/material';
-import { GetInfo } from '../functions/GetInfo';
+import React, { useState, useEffect } from "react";
+import BookAppBar from "../components/BookAppBar";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import BookCard from "../components/BookCard";
+import Grid from "@mui/material/Grid";
+import { Typography } from "@mui/material";
+import { GetInfo } from "../functions/GetInfo";
 
 export default function AuthorSearch() {
   //search state
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   //books array state
   const [books, setBooks] = useState([]);
   //page numbers
@@ -18,29 +18,26 @@ export default function AuthorSearch() {
   const [bIndex, setBIndex] = useState(0);
   const [clicked, setClicked] = useState(1);
   //set search on load
-  useEffect(() => {
-    setSearch(localStorage.getItem('search') || '');
-  }, []);
+
   //get books from API with useffect
   useEffect(() => {
-    if (search !== '') {
-      localStorage.setItem('search', search);
+    if (search !== "") {
       GetInfo(
         `https://www.googleapis.com/books/v1/volumes?q=inauthor:${search.replace(
-          ' ',
-          '+'
+          " ",
+          "+",
         )}&filter=free-ebooks` +
           `&key=${process.env.REACT_APP_API_KEY}` +
-          '&orderBy=newest&maxResults=40' +
-          `&startIndex=${bIndex}`
+          "&orderBy=newest&maxResults=40" +
+          `&startIndex=${bIndex}`,
       )
         .then((res) => {
+          console.log(res);
           setBooks(res.data.items);
           setTotal(res.data.totalItems);
         })
         .catch((err) => {
-          alert('Error getting book data');
-          setSearch('');
+          alert(err);
         });
     } else {
       setBooks([]);
@@ -64,7 +61,7 @@ export default function AuthorSearch() {
           id="outlined-basic"
           label="Search for an author…"
           variant="outlined"
-          style={{ width: '70%' }}
+          style={{ width: "70%" }}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -101,7 +98,7 @@ export default function AuthorSearch() {
             variant="h6"
             mx={1}
             my={2}
-            style={{ color: clicked === page ? '#00f' : '#000' }}
+            style={{ color: clicked === page ? "#00f" : "#000" }}
             onClick={() => {
               setBIndex(page * 40 - 40);
               setClicked(page);
