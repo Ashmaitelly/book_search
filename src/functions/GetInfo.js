@@ -5,6 +5,10 @@ export const GetInfo = async (uri) => {
     let res = await axios.get(uri);
     return res;
   } catch (err) {
-    throw new Error(err.response.data.error.message);
+    const errorMessage =
+      err.response?.data?.error?.message ||
+      err.message ||
+      "An unknown error occurred";
+    throw new Error(errorMessage);
   }
 };
