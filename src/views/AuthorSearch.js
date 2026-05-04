@@ -98,6 +98,12 @@ export default function AuthorSearch() {
           <Box mt={4} mb={4}>
             <CircularProgress />
           </Box>
+        ) : debouncedSearch && (!books || books.length === 0) ? (
+          <Box mt={4}>
+            <Typography variant="h6" color="textSecondary">
+              No books found for this author.
+            </Typography>
+          </Box>
         ) : (
           books &&
           books.map((book) => (
@@ -111,7 +117,7 @@ export default function AuthorSearch() {
           ))
         )}
       </Grid>
-      {!loading ? (
+      {!loading && books && books.length > 0 ? (
         <Grid
           container
           direction="row"
