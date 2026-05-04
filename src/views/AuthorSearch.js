@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import BookCard from "../components/BookCard";
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
+import { Typography, CircularProgress } from "@mui/material";
 import { GetInfo } from "../functions/GetInfo";
 
 export default function AuthorSearch() {
@@ -13,6 +13,7 @@ export default function AuthorSearch() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   //books state
   const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   //pagination
   const [total, setTotal] = useState(0);
@@ -47,6 +48,7 @@ export default function AuthorSearch() {
   //get books from API with useffect
   useEffect(() => {
     if (debouncedSearch !== "") {
+      setLoading(true);
       GetInfo(
         `https://www.googleapis.com/books/v1/volumes?q=inauthor:${encodeURIComponent(
           debouncedSearch,
@@ -58,13 +60,16 @@ export default function AuthorSearch() {
         .then((res) => {
           setBooks(res.data.items);
           setTotal(res.data.totalItems);
+          setLoading(false);
         })
         .catch((err) => {
           alert(err);
+          setLoading(false);
         });
     } else {
       setBooks([]);
       setTotal(0);
+      setLoading(false);
     }
   }, [debouncedSearch, bIndex]);
   //set pages useEffect
@@ -89,7 +94,12 @@ export default function AuthorSearch() {
         justifyContent="center"
         alignItems="flex-start"
       >
-        {books &&
+        {loading ? (
+          <Box mt={4} mb={4}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          books &&
           books.map((book) => (
             <Grid item key={book.etag}>
               <BookCard
@@ -98,33 +108,36 @@ export default function AuthorSearch() {
                 key={book.id}
               />
             </Grid>
+          ))
+        )}
+      </Grid>
+      {!loading ? (
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {/* map here */}
+          {pages.map((page, index) => (
+            <Typography
+              key={index}
+              className="Clickable"
+              variant="h6"
+              mx={1}
+              my={2}
+              style={{ color: clicked === page ? "#00f" : "#000" }}
+              onClick={() => {
+                setBIndex(page * 40 - 40);
+                setClicked(page);
+                window.scrollTo(0, 0);
+              }}
+            >
+              {`${page}`}
+            </Typography>
           ))}
-      </Grid>
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-      >
-        {/* map here */}
-        {pages.map((page, index) => (
-          <Typography
-            key={index}
-            className="Clickable"
-            variant="h6"
-            mx={1}
-            my={2}
-            style={{ color: clicked === page ? "#00f" : "#000" }}
-            onClick={() => {
-              setBIndex(page * 40 - 40);
-              setClicked(page);
-              window.scrollTo(0, 0);
-            }}
-          >
-            {`${page}`}
-          </Typography>
-        ))}
-      </Grid>
+        </Grid>
+      ) : null}
     </div>
   );
 }
