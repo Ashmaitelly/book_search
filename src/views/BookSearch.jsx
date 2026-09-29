@@ -7,7 +7,9 @@ import Grid from "@mui/material/Grid";
 import { Typography, CircularProgress } from "@mui/material";
 import { GetInfo } from "../functions/GetInfo";
 
-export default function AuthorSearch() {
+const PAGE_SIZE = 20;
+
+export default function BookSearch() {
   //search state
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -35,7 +37,7 @@ export default function AuthorSearch() {
 
   const pages = useMemo(() => {
     let temp = [];
-    const totalPages = Math.ceil(total / 40);
+    const totalPages = Math.ceil(total / PAGE_SIZE);
     const start = Math.max(1, clicked - 2);
     const end = Math.min(totalPages, clicked + 2);
 
@@ -50,11 +52,11 @@ export default function AuthorSearch() {
     if (debouncedSearch !== "") {
       setLoading(true);
       GetInfo(
-        `https://www.googleapis.com/books/v1/volumes?q=inauthor:${encodeURIComponent(
+        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
           debouncedSearch,
         )}&filter=free-ebooks` +
           `&key=${import.meta.env.VITE_API_KEY}` +
-          "&orderBy=newest&maxResults=40" +
+          `&orderBy=newest&maxResults=${PAGE_SIZE}` +
           `&startIndex=${bIndex}`,
       )
         .then((res) => {
@@ -80,7 +82,7 @@ export default function AuthorSearch() {
       <Box sx={{ mt: 2, mb: 2 }}>
         <TextField
           id="outlined-basic"
-          label="Search for an author…"
+          label="Search by title, author, or keyword…"
           variant="outlined"
           style={{ width: "70%" }}
           value={search}
@@ -100,7 +102,7 @@ export default function AuthorSearch() {
         ) : debouncedSearch && (!books || books.length === 0) ? (
           <Box sx={{ mt: 4 }}>
             <Typography variant="h6" color="textSecondary">
-              No books found for this author.
+              No books found.
             </Typography>
           </Box>
         ) : (
@@ -130,7 +132,7 @@ export default function AuthorSearch() {
               variant="h6"
               sx={{ mx: 1, my: 2, color: clicked === page ? "#00f" : "#000" }}
               onClick={() => {
-                setBIndex(page * 40 - 40);
+                setBIndex((page - 1) * PAGE_SIZE);
                 setClicked(page);
                 window.scrollTo(0, 0);
               }}

@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
 import SignIn from './views/SignIn';
-import AuthorSearch from './views/AuthorSearch';
+import BookSearch from './views/BookSearch';
 import { HashRouter, Routes, Route } from 'react-router';
 import BookInfo from './views/BookInfo';
 
@@ -11,7 +11,7 @@ function App() {
       <HashRouter>
         <Routes>
           <Route exact path="/" element={<SignIn />} />
-          <Route path="/search" element={<AuthorSearch />} />
+          <Route path="/search" element={<BookSearch />} />
           <Route path="/book" element={<BookInfo />} />
         </Routes>
       </HashRouter>

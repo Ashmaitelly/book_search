@@ -16,7 +16,7 @@ const BookInfo = () => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     GetInfo(
-      `https://www.googleapis.com/books/v1/volumes/${searchParams.get('id')}`
+      `https://www.googleapis.com/books/v1/volumes/${searchParams.get('id')}?key=${import.meta.env.VITE_API_KEY}`
     )
       .then((res) => {
         setBook(res.data);
