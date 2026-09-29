@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import BookAppBar from '../components/BookAppBar';
-import { useNavigate, useSearchParams } from 'react-router';
-import '../App.css';
-import PreviewHeader from '../components/PreviewHeader';
-import PreviewFooter from '../components/PreviewFooter';
-import BookViewer from '../components/BookViewer';
-import { GetInfo } from '../functions/GetInfo';
+import React, { useState, useEffect } from "react";
+import BookAppBar from "../components/BookAppBar";
+import { useNavigate, useSearchParams } from "react-router";
+import "../App.css";
+import PreviewHeader from "../components/PreviewHeader";
+import PreviewFooter from "../components/PreviewFooter";
+import BookViewer from "../components/BookViewer";
+import { GetInfo } from "../functions/GetInfo";
 
 const BookInfo = () => {
-  //Navigator
   const navigate = useNavigate();
   //search params
   const [searchParams] = useSearchParams();
@@ -16,14 +15,14 @@ const BookInfo = () => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     GetInfo(
-      `https://www.googleapis.com/books/v1/volumes/${searchParams.get('id')}?key=${import.meta.env.VITE_API_KEY}`
+      `https://www.googleapis.com/books/v1/volumes/${searchParams.get("id")}?key=${import.meta.env.VITE_API_KEY}`,
     )
       .then((res) => {
         setBook(res.data);
         setLoaded(true);
       })
       .catch((err) => {
-        alert('Error getting book data');
+        alert("Error getting book data");
         navigate(-1);
       });
   }, [searchParams, navigate]);
@@ -40,7 +39,7 @@ const BookInfo = () => {
             authors={book.volumeInfo.authors}
             publisher={book.volumeInfo.publisher}
           />
-          <BookViewer id={searchParams.get('id')} />
+          <BookViewer id={searchParams.get("id")} />
           <PreviewFooter
             pages={book.volumeInfo.pageCount}
             epub={book.accessInfo.epub.downloadLink}
