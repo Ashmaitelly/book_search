@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 export default function BAppBar() {
   //navigation hook
@@ -22,7 +22,7 @@ export default function BAppBar() {
     navigate('/');
   };
   return (
-    <Box m={0} p={0}>
+    <Box sx={{ m: 0, p: 0 }}>
       <AppBar position="static">
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Typography variant="h6" component="div">

@@ -53,7 +53,7 @@ export default function AuthorSearch() {
         `https://www.googleapis.com/books/v1/volumes?q=inauthor:${encodeURIComponent(
           debouncedSearch,
         )}&filter=free-ebooks` +
-          `&key=${process.env.REACT_APP_API_KEY}` +
+          `&key=${import.meta.env.VITE_API_KEY}` +
           "&orderBy=newest&maxResults=40" +
           `&startIndex=${bIndex}`,
       )
@@ -77,7 +77,7 @@ export default function AuthorSearch() {
   return (
     <div className="Flex-Col">
       <BookAppBar />
-      <Box mt={2} mb={2}>
+      <Box sx={{ mt: 2, mb: 2 }}>
         <TextField
           id="outlined-basic"
           label="Search for an author…"
@@ -91,15 +91,14 @@ export default function AuthorSearch() {
         container
         spacing={1}
         direction="row"
-        justifyContent="center"
-        alignItems="flex-start"
+        sx={{ justifyContent: "center", alignItems: "flex-start" }}
       >
         {loading ? (
-          <Box mt={4} mb={4}>
+          <Box sx={{ mt: 4, mb: 4 }}>
             <CircularProgress />
           </Box>
         ) : debouncedSearch && (!books || books.length === 0) ? (
-          <Box mt={4}>
+          <Box sx={{ mt: 4 }}>
             <Typography variant="h6" color="textSecondary">
               No books found for this author.
             </Typography>
@@ -107,7 +106,7 @@ export default function AuthorSearch() {
         ) : (
           books &&
           books.map((book) => (
-            <Grid item key={book.etag}>
+            <Grid key={book.etag}>
               <BookCard
                 volumeInfo={book.volumeInfo}
                 id={book.id}
@@ -121,8 +120,7 @@ export default function AuthorSearch() {
         <Grid
           container
           direction="row"
-          justifyContent="center"
-          alignItems="center"
+          sx={{ justifyContent: "center", alignItems: "center" }}
         >
           {/* map here */}
           {pages.map((page, index) => (
@@ -130,9 +128,7 @@ export default function AuthorSearch() {
               key={index}
               className="Clickable"
               variant="h6"
-              mx={1}
-              my={2}
-              style={{ color: clicked === page ? "#00f" : "#000" }}
+              sx={{ mx: 1, my: 2, color: clicked === page ? "#00f" : "#000" }}
               onClick={() => {
                 setBIndex(page * 40 - 40);
                 setClicked(page);

@@ -5,10 +5,10 @@ import { Typography } from '@mui/material';
 const PreviewHeader = ({ title, authors, language, publisher }) => {
   return (
     <Box>
-      <Typography variant="h5" m={1}>
+      <Typography variant="h5" sx={{ m: 1 }}>
         {title} ({language.toUpperCase()})
       </Typography>
-      <Typography variant="h6" m={1}>
+      <Typography variant="h6" sx={{ m: 1 }}>
         by {authors.join(', ')}
       </Typography>
       <Typography variant="caption">
