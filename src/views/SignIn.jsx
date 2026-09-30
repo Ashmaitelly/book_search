@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router";
+import { isSignedIn, signIn } from "../functions/auth";
 
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 
@@ -13,14 +14,14 @@ export default function SignIn() {
   //set user
   const callbackResponse = useCallback(
     (response) => {
-      localStorage.setItem("user", response.credential);
+      signIn(response.credential);
       navigate("/search");
     },
     [navigate],
   );
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
+    if (isSignedIn()) {
       navigate("/search");
       return;
     }

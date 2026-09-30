@@ -5,20 +5,21 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
+import { isSignedIn, signOut } from '../functions/auth';
 
 export default function BAppBar() {
   //navigation hook
   const navigate = useNavigate();
   //Go to landing page if no token
   useEffect(() => {
-    if (!localStorage.getItem('user')) {
+    if (!isSignedIn()) {
       navigate('/');
     }
   }, [navigate]);
 
   //Logout function
   const Logout = () => {
-    localStorage.clear();
+    signOut();
     navigate('/');
   };
   return (
