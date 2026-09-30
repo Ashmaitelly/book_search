@@ -7,7 +7,7 @@ const BookViewer = ({ id }) => {
       title="book"
       sandbox="allow-scripts allow-same-origin allow-popups"
       referrerPolicy="no-referrer"
-      style={{ height: '70vh' }}
+      style={{ height: '70vh', width: '100%', border: 0, borderRadius: 12 }}
     ></iframe>
   );
 };

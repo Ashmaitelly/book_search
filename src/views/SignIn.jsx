@@ -2,7 +2,8 @@ import React, { useEffect, useCallback } from "react";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { Typography } from "@mui/material";
+import { Typography, Paper } from "@mui/material";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useNavigate } from "react-router";
 import { isSignedIn, signIn } from "../functions/auth";
 
@@ -52,31 +53,43 @@ export default function SignIn() {
   }, [callbackResponse, navigate]);
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Typography variant="h3" sx={{ marginTop: 4 }}>
-        Book App
-      </Typography>
-      <Box
-        sx={{
-          marginTop: 4,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          border: 1,
-          borderRadius: "16px",
-          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-        }}
-      >
-        <Typography variant="h4">Sign In</Typography>
-        <Avatar sx={{ m: 2, bgcolor: "secondary.main" }}></Avatar>
-        {CLIENT_ID ? (
-          <div id="google-signin" style={{ marginBottom: "10px" }} />
-        ) : (
-          <Typography color="error" sx={{ mb: 2, px: 2 }}>
-            Sign-in is not configured
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #3f51b5 0%, #7986cb 100%)",
+        p: 2,
+      }}
+    >
+      <Container component="main" maxWidth="xs">
+        <Paper
+          elevation={8}
+          sx={{
+            p: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <Avatar sx={{ bgcolor: "primary.main", width: 56, height: 56 }}>
+            <MenuBookIcon />
+          </Avatar>
+          <Typography variant="h4" component="h1">
+            Book Finder
           </Typography>
-        )}
-      </Box>
-    </Container>
+          <Typography color="text.secondary">
+            Sign in to search thousands of free ebooks
+          </Typography>
+          {CLIENT_ID ? (
+            <div id="google-signin" style={{ marginTop: 8 }} />
+          ) : (
+            <Typography color="error">Sign-in is not configured</Typography>
+          )}
+        </Paper>
+      </Container>
+    </Box>
   );
 }

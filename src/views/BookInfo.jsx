@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import BookAppBar from "../components/BookAppBar";
 import { useNavigate, useSearchParams } from "react-router";
 import "../App.css";
+import Container from "@mui/material/Container";
+import Paper from "@mui/material/Paper";
+import CircularProgress from "@mui/material/CircularProgress";
 import PreviewHeader from "../components/PreviewHeader";
 import PreviewFooter from "../components/PreviewFooter";
 import BookViewer from "../components/BookViewer";
@@ -30,23 +33,26 @@ const BookInfo = () => {
   return (
     <div>
       <BookAppBar />
-
-      {loaded && (
-        <div className="Flex-Col">
-          <PreviewHeader
-            title={book.volumeInfo.title}
-            language={book.volumeInfo.language}
-            authors={book.volumeInfo.authors}
-            publisher={book.volumeInfo.publisher}
-          />
-          <BookViewer id={searchParams.get("id")} />
-          <PreviewFooter
-            pages={book.volumeInfo.pageCount}
-            epub={book.accessInfo.epub.downloadLink}
-            pdf={book.accessInfo.pdf.downloadLink}
-          />
-        </div>
-      )}
+      <Container maxWidth="md" sx={{ py: 3 }}>
+        {!loaded ? (
+          <CircularProgress sx={{ mt: 6 }} />
+        ) : (
+          <Paper sx={{ p: { xs: 2, sm: 3 } }}>
+            <PreviewHeader
+              title={book.volumeInfo.title}
+              language={book.volumeInfo.language}
+              authors={book.volumeInfo.authors}
+              publisher={book.volumeInfo.publisher}
+            />
+            <BookViewer id={searchParams.get("id")} />
+            <PreviewFooter
+              pages={book.volumeInfo.pageCount}
+              epub={book.accessInfo?.epub?.downloadLink}
+              pdf={book.accessInfo?.pdf?.downloadLink}
+            />
+          </Paper>
+        )}
+      </Container>
     </div>
   );
 };
