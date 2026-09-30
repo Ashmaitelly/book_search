@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router';
 import { isSignedIn, signOut } from '../functions/auth';
 
@@ -23,17 +24,16 @@ export default function BAppBar() {
     navigate('/');
   };
   return (
-    <Box sx={{ m: 0, p: 0 }}>
-      <AppBar position="static">
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6" component="div">
-            Book Finder
-          </Typography>
-          <Button color="inherit" onClick={Logout}>
-            Logout
-          </Button>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <AppBar position="sticky">
+      <Toolbar>
+        <MenuBookIcon sx={{ mr: 1 }} />
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          Book Finder
+        </Typography>
+        <Button color="inherit" startIcon={<LogoutIcon />} onClick={Logout}>
+          Logout
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 }
