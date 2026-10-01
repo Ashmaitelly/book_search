@@ -41,6 +41,7 @@ export default function BookSearch() {
 
   //get books from API with useffect
   useEffect(() => {
+    let cancelled = false;
     if (debouncedSearch !== "") {
       setLoading(true);
       GetInfo(
@@ -52,11 +53,13 @@ export default function BookSearch() {
           `&startIndex=${bIndex}`,
       )
         .then((res) => {
+          if (cancelled) return;
           setBooks(res.data.items);
           setTotal(res.data.totalItems);
           setLoading(false);
         })
         .catch((err) => {
+          if (cancelled) return;
           alert(err);
           setLoading(false);
         });
@@ -65,7 +68,19 @@ export default function BookSearch() {
       setTotal(0);
       setLoading(false);
     }
+    return () => {
+      cancelled = true;
+    };
   }, [debouncedSearch, bIndex]);
+
+  // Clear results immediately when the input is emptied
+  useEffect(() => {
+    if (search === "") {
+      setDebouncedSearch("");
+      setBIndex(0);
+      setClicked(1);
+    }
+  }, [search]);
   //set pages useEffect
 
   return (
