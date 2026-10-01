@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import BookAppBar from "../components/BookAppBar";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
@@ -25,6 +25,8 @@ export default function BookSearch() {
   const [total, setTotal] = useState(0);
   const [bIndex, setBIndex] = useState(0);
   const [clicked, setClicked] = useState(1);
+  const [fetchKey, setFetchKey] = useState(0);
+  const searchVersion = useRef(0);
 
   // Debounce search input to avoid excessive API calls
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function BookSearch() {
       setDebouncedSearch(search);
       setBIndex(0);
       setClicked(1);
+      setFetchKey((k) => k + 1); // refetch even if the text matches the previous query
     }, 500);
 
     return () => {
@@ -42,6 +45,7 @@ export default function BookSearch() {
   //get books from API with useffect
   useEffect(() => {
     let cancelled = false;
+    const version = searchVersion.current;
     if (debouncedSearch !== "") {
       setLoading(true);
       GetInfo(
@@ -53,13 +57,13 @@ export default function BookSearch() {
           `&startIndex=${bIndex}`,
       )
         .then((res) => {
-          if (cancelled) return;
+          if (cancelled || version !== searchVersion.current) return;
           setBooks(res.data.items);
           setTotal(res.data.totalItems);
           setLoading(false);
         })
         .catch((err) => {
-          if (cancelled) return;
+          if (cancelled || version !== searchVersion.current) return;
           alert(err);
           setLoading(false);
         });
@@ -71,10 +75,14 @@ export default function BookSearch() {
     return () => {
       cancelled = true;
     };
-  }, [debouncedSearch, bIndex]);
+  }, [debouncedSearch, bIndex, fetchKey]);
 
-  // Clear results immediately when the input is emptied
+  // Clear results immediately whenever the input text changes
   useEffect(() => {
+    searchVersion.current += 1; // invalidates any in-flight request
+    setBooks([]);
+    setTotal(0);
+    setLoading(false);
     if (search === "") {
       setDebouncedSearch("");
       setBIndex(0);
